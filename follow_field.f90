@@ -291,7 +291,7 @@ subroutine follow_field_gBoozer(p, dphi, dist, istate, iter)
   ifail = 0
   istate = 1
 
-  call dlsode(field_deriv_, 3, y, t0, t1, 1, tol, tol, itask, istate, 0, &
+  call dlsode(field_deriv_gBoozer, 3, y, t0, t1, 1, tol, tol, itask, istate, 0, &
        rwork, lrw, iwork, liw, jacl, 22)
 
   ! This indicates that dlsode exited improperly
