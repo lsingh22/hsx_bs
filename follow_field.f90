@@ -250,19 +250,16 @@ subroutine follow_field_chi(p, ds, dist, istate, iter)
   return
 end subroutine follow_field_chi
 
-subroutine follow_field_gboozer(p, dphi, dist, istate)
+subroutine follow_field_gBoozer(p, dphi, dist, istate, iter)
 
 
   use coil_module
 
-
   parameter (lrw=58)
-  parameter (liw=22)
+  parameter (liw=23)
   parameter (itask=1)
 
-  real, dimension(3) :: pold, pnew, poldc, pnewc
-  real, dimension(4) :: p
-  real, dimension(2) :: y
+  real, dimension(3) :: y, p, pold, pnew, poldc, pnewc
   ! For now this is unused.
   real :: dphi, t0, t1, tol
   ! dstuff for dlsode
@@ -271,17 +268,17 @@ subroutine follow_field_gboozer(p, dphi, dist, istate)
   real, dimension(lrw) :: rwork
   real, dimension(1) :: dist, r1, z1, phi1, r2, z2, phi2, x1, x2, y1, y2
 
-  external field_deriv_gboozer
+  external field_deriv_gBoozer
 
   ! start by resetting dist to zero
   dist=0.0
 
   y(1) = p(1)
   y(2) = p(2)
-
+  y(3) = p(3)
   ! start and stop phi values
-  t0 = p(4)
-  t1 = p(4) + dphi
+  t0 = (iter-1)*dphi
+  t1 = t0 + dphi
 
   ! keep track of old point
   r1=y(1)
@@ -294,7 +291,7 @@ subroutine follow_field_gboozer(p, dphi, dist, istate)
   ifail = 0
   istate = 1
 
-  call dlsode(field_deriv_, 2, y, t0, t1, 1, tol, tol, itask, istate, 0, &
+  call dlsode(field_deriv_, 3, y, t0, t1, 1, tol, tol, itask, istate, 0, &
        rwork, lrw, iwork, liw, jacl, 22)
 
   ! This indicates that dlsode exited improperly
@@ -305,13 +302,13 @@ subroutine follow_field_gboozer(p, dphi, dist, istate)
 
   p(1) = y(1)
   p(2) = y(2)
-  p(4) = t1
+  p(3) = y(3)
 
 
   ! keep track of new point
   r2=p(1)
   z2=p(2)
-  phi2=p(4)
+  phi2=t1
   pnew=(/r2,z2,phi2/)
 
   ! calculate distance between original point and new point
@@ -332,5 +329,5 @@ subroutine follow_field_gboozer(p, dphi, dist, istate)
   ! print *, dist
 
   return
-end subroutine follow_field_gboozer
+end subroutine follow_field_gBoozer
 

@@ -80,7 +80,7 @@ subroutine follow_to_wall
            call follow_field_chi(points_move(j,:), points_dphi, dist, &
              istate,current_step)
         else if (follow_type == 4) then
-           call follow_field_gboozer(points_move(j,:), points_dphi, dist, &
+           call follow_field_gBoozer(points_move(j,:), points_dphi, dist, &
              istate,current_step)
         else
            write (*,*) 'illegal choice for follow_type parameter'

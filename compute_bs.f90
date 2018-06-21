@@ -656,7 +656,7 @@ subroutine field_deriv_chi(neq, t, y, dydx)
   return 
 end subroutine field_deriv_chi
   
-subroutine field_deriv_gboozer(neq, t, y, dydx)
+subroutine field_deriv_gBoozer(neq, t, y, dydx)
   use points_module
   implicit none
 
@@ -667,7 +667,7 @@ subroutine field_deriv_gboozer(neq, t, y, dydx)
   ! Probably not necessary, but helpful to reassign for bookkeeping
   przp(1) = y(1)
   przp(2) = y(2)
-  przp(3) = y(3)
+  przp(3) = t
 
   call pol2cart(przp, pxyz) 
 
@@ -682,7 +682,7 @@ subroutine field_deriv_gboozer(neq, t, y, dydx)
   dydx(2) = brzp(2)/brzp(3)
   dydx(3) = bmag/brzp(3)
   return
-end subroutine field_deriv_gboozer
+end subroutine field_deriv_gBoozer
 
 ! This is a function to be called from dlsode to compute the field derivatives
 ! It takes values of r,z,phi, converts to x,y,z, calculates the field,
